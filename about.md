@@ -13,4 +13,4 @@ Interests: Humanitarian data analysis, aid effectiveness, Arabic, Rstats, QGIS, 
 ### Get in touch
 
 If you would like to collaborate on a research or data analysis project, please get in touch.
-[opwilcox@gmail.com(mailto:opwilcox@gmail.com)
+[opwilcox@gmail.com](mailto:opwilcox@gmail.com)
