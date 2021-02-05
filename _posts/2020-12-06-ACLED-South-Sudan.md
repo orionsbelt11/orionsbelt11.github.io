@@ -7,6 +7,6 @@ As the world’s youngest nation, South Sudan has had a rough start. After a dec
 
 The war has devastated the population, killing more than 400,000 and displacing millions. While no region was left unscathed, the northeast, the ancestral home of both the Dinka and the Nuer, and the diverse south around the capital Juba, were particularly hard hit. 
 
-![_config.yml]({{ site.baseurl }}/images/config.png)
+![_config.yml]({{ site.baseurl }}/images/ss_map.png)
 
 The easiest way to make your first post is to edit this one. Go into /_posts/ and update the Hello World markdown file. For more instructions head over to the [Jekyll Now repository](https://github.com/barryclark/jekyll-now) on GitHub.
