@@ -4,12 +4,13 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+I am a research manager and data analyst with DT Global, an international development firm in the Washington, DC. I use this space to write about data analysis, GIS mapping, and field research methods. 
 
-### More Information
+From 2015-2018 I helped run the website syriadirect.org. 
 
-A place to include any other types of information that you'd like to include about yourself.
+Interests: Humanitarian data analysis, aid effectiveness, Arabic, Rstats, QGIS, Tableau
 
-### Contact me
+### Get in touch
 
-[email@domain.com](mailto:email@domain.com)
+If you would like to collaborate on a research or data analysis project, please get in touch.
+[opwilcox@gmail.com(mailto:opwilcox@gmail.com)
