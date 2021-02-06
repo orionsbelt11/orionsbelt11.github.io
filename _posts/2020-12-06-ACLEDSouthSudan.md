@@ -8,7 +8,3 @@ As the world’s youngest nation, South Sudan has had a rough start. After a dec
 The war has devastated the population, killing more than 400,000 and displacing millions. While no region was left unscathed, the northeast, the ancestral home of both the Dinka and the Nuer, and the diverse south around the capital Juba, were particularly hard hit. 
 
 ![_config.yml]({{ site.baseurl }}/images/ss_map.png)
-
-
-<iframe src="https://public.tableau.com/views/DCTreesScatter/scatter?:showVizHome=no&:embed=true"
- width="955" height="955"></iframe>
