@@ -21,6 +21,6 @@ The R-ARCSS agreement is viewed by most analysts as inherently flawed in that it
 
 The increase in violence in 2020 largely stems from intercommunal violence in the northeast which killed hundreds over the summer. Many media outlets have characterized this violence as “cattle raiding”, but a U.N. commissioner in South Sudan said that these local conflicts are being increasingly “politicized” and militias have access to heavy weaponry.  Local conflicts have also flared into large-scale violence in the central Warrap and Lakes states, where recent flooding has also hit communities hard. In the southern region around Juba, known as Central Equatoria,  the National Salvation Front, or NAS (not an acronym, Arabic for "people"; also they have a website), has refused to join the peace talks and continue to fight government forces.
 
-![_config.yml]({{ site.baseurl }}/images/Slide3.PNG)
+![_config.yml]({{ site.baseurl }}/images/Slide4.PNG)
 
 As these maps and timeline show, violence continues throughout the country more than two years since the agreement and has actually worsened since the agreement in some places (see below). In 2020, violence was 37% higher than 2019 levels, still below the peak of violence during the war, but devastating all the same. 
