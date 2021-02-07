@@ -9,7 +9,7 @@ title: TidyTuesday
 
 ![_config.yml]({{ site.baseurl }}/images/comboII.png)
 
-This week's data came from the 2019 Kenya Census. This census round included a lot of interesting data beyond demographics. I was interested in seeing how widespread internet shopping has become in Kenya (TL:DR - not very) and comparing it to farming which I know is the most common livelihood outside Nairobi. 
+This week's data came from the 2019 Kenya Census. This census round included a lot of interesting data beyond demographics. I was interested in seeing how widespread internet shopping has become in Kenya and comparing it to farming which I know is the most common livelihood outside Nairobi. 
 
 #### Week 2 Urban Transit Projects
 
