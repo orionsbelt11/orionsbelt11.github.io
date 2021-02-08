@@ -3,7 +3,7 @@ layout: page
 title: Data
 permalink: /data/
 ---
-I try to store any novel datasets I use in my posts here. I don't always do it though because I am a bit lazy. 
+I try to store any custom datasets I develop for my posts here. Sometimes I do not get around to it though. Reach out if you are looking for something specific.
 
 [DC Census tracts with urban tree canopy data - September 2020](https://www.arcgis.com/home/item.html?id=d5337c773005472e97a40c0b9ced3bbd#)
 
