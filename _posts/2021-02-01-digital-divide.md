@@ -1,3 +1,8 @@
+---
+layout: post
+title: Digital Divide
+---
+
 For those of us lucky enough to be working from home over the past year,
 the workday has become synonymous with one word: Zoom. From daily
 check-ins, to all-hands meetings, to not-so-happy happy hours, our
