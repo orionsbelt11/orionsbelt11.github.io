@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Tracking South Sudan's conflict with ACLED data
+title: Tracking South Sudan's conflict with geolocated event data
 ---
 
 ![_config.yml]({{ site.baseurl }}/images/ss_map.png)
