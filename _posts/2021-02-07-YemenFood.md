@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Why revoking the Houthi FTO designation was the right call
+title: Mapping food insecurity in Yemen
 ---
 
 ![_config.yml]({{ site.baseurl }}/images/Yemen-Food-Security.png)
