@@ -1,0 +1,128 @@
+---
+title: "Which states are over-represented in the NFL?"
+subtitle: "Southern states (and Iowa) are football factories"
+excerpt: "Scraping data to find the states that are home to the most NFL players per capita"
+date: 2024-02-02
+author: "Orion "
+draft: false
+images:
+series:
+tags:
+categories:
+layout: single
+---
+
+```{r echo=F, message=F}
+library(tidyverse)
+
+proj = "C:/Users/Orion Wilcox/Documents/Personal/Projects/Sports Hometowns/"
+
+nfl = read_csv((paste0(proj, "data/processed/nfl_hometowns.csv"))) %>%
+  janitor::clean_names()
+
+```
+
+
+When it comes to state rankings of education, health, poverty and many other measures, southern states inevitably end up on the wrong end of the list. My own home state of Mississippi is so good at being bad that other southerners coined the phrase “Thank God for Mississippi."
+
+But no matter how bad our education, health, or income, there is one area where Southerners have a solid claim to excellence: the football field.  I decided to check if the south’s love of football in fact translates into an increased chance of professional success for its players. Using data from sport-reference.com, I calculated the total number of active NFL players per million residents from each state. 
+
+![Figure 1. NFL players per capita.](img/fig1_map.png)
+
+The numbers don’t lie. The “Deep South” states of Louisiana, Mississippi, Alabama, and Georgia are football factories, claiming the top four spots in producing NFL talent on a per-capita basis. Louisiana slightly edges out my home state for the top spot but, honestly, it's nice to not be on the bottom for once. Outside of the south, Iowa is the only state with more than 10 players per million residents (something in that corn, I guess).The northeast is particularly weak at producing NFL talent.  In the chart below, I pivot the axis by 45 degrees to emphasize the trend-line. States falling below the line are home to fewer NFL players than the national average (around 5 per million). States above the line are home to more than the average. Georgia has four times as many NFL players than New York, despite having half the population.
+
+![Figure 2. NFL players vs population](img/fig2_scatter.png)
+
+## The Process: Scraping tables
+
+The biggest challenge with this project was accessing the player data. Sports-reference.com provides tables of career stats for all NFL players that include home state and birthplace. Here's a quick peek at the table.
+
+```{r echo=F}
+library(gt)
+library(gtExtras) #for making pretty tables
+
+head(nfl) %>% gt() %>% gt_theme_nytimes()
+```
+
+The excellent [sports-reference website](https://www.sports-reference.com/) provides a download option for accessing the tables. Unfortunately, the tables are organized by state, so downloading the tables manually would require navigating to the page for each of the 50 states and downloading. This is where the Rvest package for web scraping comes in handy. The [Rvest website](https://rvest.tidyverse.org/articles/rvest.html) provides an  intro to scraping, so I'll just go over the basic process of pulling a table from a web page.
+
+Whenever I begin a web scraping project I start out by exploring the structure of the website using Google Chrome's Developer Tools. Once you open the Developer Tools window, you can hover over each element in the code and the element will highlight in the browser. In the sports-reference page, we can see that the player data table is a "table node." 
+
+Now that we know what we're looking for, we can jump into R.
+
+```{r, message=FALSE}
+
+library(rvest)
+#library(stringi)
+
+#paste the URL 
+# I'm separating the root URL from the state signifier to set up a for loop for later
+
+url = paste0("https://www.pro-football-reference.com/friv/birthplaces.cgi?country=USA&state=", "AL")
+
+# The read html function loads the web page into R
+html <- read_html(url)
+
+# Grab the table node with html_node
+node <- html_node(html, "table")
+
+# The very useful html_table function automatically formats the output as a data frame
+table <- html_table(node, header = T)
+
+# Append the state code to the table
+
+table$State = "AL"
+
+# Select only the biographical data we need
+# The column "To" indicates most recent year the player was active
+table = select(table, 
+               Player, 
+               City, 
+               State, 
+               To)
+
+```
+
+We can see the output (limited to five rows) below.
+
+```{r echo = F}
+table %>% 
+  head() %>%
+  gt %>% 
+  gt_theme_nytimes()
+```
+
+Now that we have the process for pulling data for one state, we can simply refactor our code into a for-loop and run through all 50 states. But there is one other issue we need to resolve first.
+
+The table for Alabama returned 200 players. In reality though, Alabama has had 788 players in the NFL. It turns out that the site limits the table rows to 200 per page. We'll need to incorporate this information into our for-loop.
+
+Here is the final nested for-loop. We first grab the page for the first state in the list and load the first table. We then iterate through each page adding "200 to the URL"&offset=" plus the value of the offset (adding 200 each time). Once we have grabbed all of the tables for a state, we move to the next state in the list. 
+
+```{r eval=FALSE}
+
+# list of states and the ISO codes used in the website URL
+state_table = read_csv("./state_iso2_codes.csv")
+states = state_table$code
+
+# The website paginates after each 200 players
+offsets = seq(0,2600, 200)
+
+#create function
+get_cfb = function(states) {
+  offsets = seq(0,2600, 200)
+  for(i in states) {
+    for(x in offsets){
+      url = paste0("https://www.pro-football-reference.com/friv/birthplaces.cgi?country=USA&state=", i, "&offset=", x)
+      html <- read_html(url)
+      node <- html_node(html, "table")
+      table <- html_table(node, header = T)}
+  
+    #add country slug to table
+      table$state <- i
+  
+    #add to empty table
+    all_players = rbind(table, all_players)}}
+```
+
+The above for-loop worked pretty well but be aware that the sports-reference site will throttle bulk requests. I ended up splitting my calls into batches of 3 states at a time. For anyone who wants to replicate this process, I recently learned about the [polite package](https://cran.r-project.org/web/packages/polite/index.html) that will manage this process for you. 
+
