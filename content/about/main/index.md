@@ -6,13 +6,7 @@ use_featured: false # if false, use most recent by date
 number_categories: 3 # set to zero to exclude
 show_intro: true
 intro: |
-  Currently, I’m a data team lead at Fraym, a start-up that analyzes population change through satellite imagery and machine learning. I use this blog to share personal projects and things I’m learning about data analysis and visualization. As a self-taught coder and data analyst, I learned most of what I know from reading blogs and articles of random people on the internet who were kind enough to share their projects with the world. This blog is my attempt to give back to that community.
-
-  - I work primarily in R (tidyverse mostly), QGIS and Figma. 
-  - I’m not the world’s best coder so nothing I share here should be viewed as a “best practice”
-  - Before moving into data analytics I studied Arabic and worked as a journalist in the Middle East
-  - I live in Washington, DC with my wife and daughter
-
+ Hi! I’m Orion 👋 I use data and maps to understand the world. Currently, I’m a data team lead at Fraym, a start-up that analyzes population change through surveys, satellites, and machine learning. I write data-driven stories about foreign policy, sports, and pretty much anything I can put on a map. I also share the occasional how-to tutorial on R programming and data visualization. 
   
 show_outro: false
 outro: |

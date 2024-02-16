@@ -1,7 +1,8 @@
 ---
 title: "Hi, I'm Orion"
-subtitle: "I use data and maps to explain the world"
-description: "Currently, I’m a data team lead at Fraym, a start-up that analyzes population change through satellite imagery and machine learning. I use this blog to share personal projects and things I’m learning about data analysis and visualization. As a self-taught R programmer and data analyst, I learned most of what I know from reading blogs and articles of random people on the internet who were kind enough to share their projects with the world. This blog is my attempt to give back to that community."
+subtitle: "I use data and maps to understand the world"
+description: "Currently, I’m a data team lead at Fraym, a start-up that analyzes population change through surveys, satellites, and machine learning. I write data-driven stories about foreign policy, sports, and pretty much anything I can put on a map. I also share the occasional how-to tutorial on R programming and data visualization."
+
 images:
   - img/about/headshot.png
 image_left: false
