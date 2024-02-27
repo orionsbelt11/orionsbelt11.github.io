@@ -1,0 +1,42 @@
+---
+title: "Mapping DC's Diversity"
+subtitle: 
+excerpt: "1 in 4 residents of the greather Washington, DC region were born in a foreign country. I use census data to map the top five foreign-born communities in the region."
+date: 2024-02-27
+author: 
+draft: false
+images:
+series:
+tags:
+categories:
+layout: single
+---
+
+
+
+One of the things I love about living in DC is the region's diversity. Visiting a neighborhood can be like visiting another country, with opportunities to hear languages and try foods from around the world. I decided to look into ways to map this diversity and found some examples of using Census data to map populations with connections to different countries. 
+
+I ended up using the excellent tidycensus package by Kyle Walker to pull data from the 2016-2020 American Community Survey (ACS). The ACS contains more detailed questions than the census (which is run every 10 years) and includes a question on whether a person was born in a foreign country. 
+
+I explored a few different ways to visualize the data, including choropleth (filled) maps but I wanted to find a way to include multiple communities on one map in a way that captured the interconnected nature of the region's neighborhoods. I ended up settling on a technique called a Dasymetric Dot Density map. This technique creates a dot for a set number of people in an area (a census tract, which is close to a neighborhood in my case) and then distributes those dots within the area at random. In my case, I created a single dot for each 50 people from a specific country within each census tract in Washington, DC and its immediate suburbs. 
+
+
+![Figure](img/top5.png)
+
+The result is admittedly a bit cluttered (not exactly following Tufte principals here), but I really like how it captures the ways that each community is both concentrated in specific areas and spread throughout the region. I also just think it looks cool. 
+
+The map shows that the top five foreign born communities in the area are Salvadorans (about 13% of the foreign-born population), Indians, Koreans, Chinese, and Ethiopians. I knew that the Salvadoran community in DC is huge but I had no idea it was the largest immigrant community. I was also interested to see that the Asian communities are more centered in the Virginia suburbs, while the Ethiopian community is mostly in northwest DC, Alexandria and Montgomery county. Of course there are lots of exceptions to these trends. For example, in one census tract near downtown 26 percent of residents were born in China. It turns out that this tract contains the Wah Luck housing development, a nursing home for elderly Chinese Americans The home is a remnant of a Chinese immigrant community that once numbered in the thousands. Lastly, the map shows that the region's diversity extends well beyond the city. In fact, the district has the smallest foreign-born population of the three stats that make up the capital region (13% compared to over 25% for the Virginia and Maryland suburbs). 
+
+
+I  broke out the map above into separate maps to highlight the different communities below.
+
+![Figure](img/Salvadoran.png)
+
+![Figure](img/Indian.png)
+
+![Figure](img/Korean.png)
+
+![Figure](img/Chinese.png)
+
+![Figure](img/Ethiopian.png)
+

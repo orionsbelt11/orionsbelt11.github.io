@@ -1,0 +1,249 @@
+---
+title: "NCAA bubble resumes"
+subtitle: 
+excerpt: 
+date: 2024-02-20
+author: 
+draft: true
+images:
+series:
+tags:
+categories:
+layout: single
+---
+
+
+```{r}
+library(rvest)
+library(tidyverse)
+library(magrittr)
+library(ncaahoopR)
+library(sqldf)
+
+proj = "C:/Users/Orion Wilcox/Documents/Personal/Projects/NCAA Schedules"
+```
+
+#Pull data
+
+```{r}
+#helper data from ncaahoopsR
+dict = dict
+teams = ids
+
+#rankings from NCAA website (updated daily)
+ncaa = read_html("https://www.ncaa.com/rankings/basketball-men/d1/ncaa-mens-basketball-net-rankings")
+
+net_rank = ncaa %>%
+  html_element("table") %>%
+  html_table() %>%
+  select(Rank, School) %>%
+  janitor::clean_names()
+
+#grab vector of top 25 teams based on net ranking
+top_25 = filter(net_rank, rank <=25)
+
+top_25 = left_join(top_25, dict, by = c("school" = "NCAA")) %>%
+  select(rank, school = ESPN)
+
+top_25_list = top_25$school
+
+#grab vector of bubble teams
+
+bubble = filter(net_rank, rank >= 63 & rank <= 72)
+
+bubble$school = recode(bubble$school, 
+                     "Ohio St." = "Ohio State",
+                     "St. Bonaventure" = "St Bonaventure")
+
+bubble_list = bubble$school
+
+```
+
+pull schedules for top 25 teams
+
+```{r}
+
+df = data.frame()
+
+for (i in bubble_list) {
+  sched = get_schedule(i)
+  sched$team = i
+  df = bind_rows(df, sched)
+  
+}
+
+
+net_rank_dict = left_join(net_rank, dict, by = c("school" = "NCAA"))
+
+df_rank = sqldf("SELECT * FROM df 
+       LEFT JOIN net_rank_dict
+       ON df.opponent = net_rank_dict.school
+       OR df.opponent = net_rank_dict.ESPN
+       OR df.opponent = net_rank_dict.ESPN_PBP
+       OR df.opponent = net_rank_dict.Warren_Nolan")
+
+#manually review for missing D1 schools
+
+df$opponent = recode(df$opponent, 
+                     "Fairleigh Dickinson" = "FDU",
+                     "Miami OH" = "Miami (OH)",
+                     "Tarleton State" = "Tarleton St.")
+
+df_rank = sqldf("SELECT * FROM df 
+       LEFT JOIN net_rank_dict
+       ON df.opponent = net_rank_dict.school
+       OR df.opponent = net_rank_dict.ESPN
+       OR df.opponent = net_rank_dict.ESPN_PBP
+       OR df.opponent = net_rank_dict.Warren_Nolan") %>%
+  select(1:10) 
+
+
+
+```
+
+```{r}
+df_rank %<>%
+  mutate(result = ifelse(team_score > opp_score, "Win", "Loss"),
+         quad = case_when(location == "H" & rank <= 30 ~ "Quad 1",
+                          location == "N" & rank <= 50 ~ "Quad 1",
+                          location == "A" & rank <= 75 ~ "Quad 1",
+                          location == "H" & rank <= 75 ~ "Quad 2",
+                          location == "N" & (rank >= 50 & rank <=100) ~ "Quad 2",
+                          location == "A" & (rank >= 75 & rank <=135) ~ "Quad 2",
+                          location == "H" & (rank >= 75 & rank <= 160) ~ "Quad 3",
+                          location == "N" & (rank >= 101 & rank <= 200) ~ "Quad 3",
+                          location == "A" & (rank >= 135 & rank <= 240) ~ "Quad 3",
+                          TRUE ~ "Quad 4"))
+
+df_rank %<>%
+  select(team, date, opponent, team_score, opp_score, result, quad, rank, location, team_score, opp_score) %>%
+  group_by(team) %>%
+  mutate(game_order = dense_rank(date))
+```
+
+#chart
+
+each team's worst loss
+
+```{r}
+
+#replace NA with unranked
+df_rank %<>%
+  mutate(rank = ifelse(is.na(rank), 999, rank))
+
+
+df_losses = df_rank %>%
+  filter(result == "Loss") %>%
+  group_by(team) %>%
+  mutate(label = case_when(rank == max(rank) & result == "Loss" ~ "Worst loss",
+                           TRUE ~ "Other loss"))
+
+df_wins = df_rank %>%
+  filter(result == "Win") %>%
+  group_by(team) %>%
+  mutate(label = case_when(rank == min(rank) & result == "Win" ~ "Best win", 
+                           TRUE ~ "Other win"))
+
+df_tbd = df_rank %>%
+  filter(is.na(result)) %>%
+  mutate(label = "Not yet played")
+
+df_rank = rbind(df_losses, df_wins)
+df_rank = rbind(df_rank, df_tbd)
+
+#set team rank as factor
+df_rank$team = factor(df_rank$team, levels = bubble_list)
+
+df_rank %<>%
+  mutate(quad_result = ifelse(is.na(result), "TBD", paste0(quad, " ", result))) %>%
+  mutate(heat = case_when(quad_result == "Quad 1 Win" ~ 1,
+                          quad_result == "Quad 2 Win" ~ 2,
+                          quad_result == "Quad 3 Win" ~ 3,
+                          quad_result == "Quad 4 Win" ~ 4,
+                          quad_result == "Quad 1 Loss" ~ 5,
+                          quad_result == "Quad 2 Loss" ~ 6,
+                          quad_result == "Quad 3 Loss" ~ 7,
+                          quad_result == "Quad 4 Loss" ~ 8))
+
+df_rank$quad_result = factor(df_rank$quad_result, levels = c("Quad 1 Win", "Quad 2 Win", "Quad 3 Win", "Quad 4 Win", "Quad 1 Loss", "Quad 2 Loss", "Quad 3 Loss", "Quad 4 Loss", "TBD"))
+
+ggplot(df_rank) +
+  geom_tile(aes(x=game_order, y=team, fill=quad_result))
+
+colors = c('#0045ff', '#5e74fc', '#84a1f7', '#a6cdf2', '#ffc4b5', '#ff9b80', '#ff6a49', '#fe0000', "grey")
+
+df_rank %<>%
+  mutate(location = case_when(location == "H" ~ "vs",
+                              location == "A" ~ "at",
+                            location == "N" ~ "vs"),
+         tooltip = ifelse(is.na(result), "Not yet played", paste0(date, ": ", result, " ", location, " ", opponent, " (", rank, ") ", " ", team_score, " to ", opp_score, sep = " ")))
+
+df_rank$Outcome = df_rank$quad_result
+bubble = ggplot(df_rank, aes(x = game_order, y = team, color = Outcome, text = tooltip), size = 5) +
+  geom_point(size = 5, shape = 15) +
+  scale_y_discrete(limits=rev) +
+  xlab("Game") +
+  ylab("") +
+  labs(title = "Tournament Resumes: Bubble Teams",
+       subtitle = "Records classified by NCAA quadrant system",
+       caption = "Quadrants based on location of game and net ranking of opponent as of February 19, 2024") +
+   scale_color_manual(values = (colors), na.value = "grey") +
+   theme(plot.title.position = "plot",
+        plot.title = element_text(family = "Space Grotesk",
+                                  face = "bold",
+                                  size = 16, margin = margin(t = 10, b = 15)),
+        plot.subtitle = element_text(family = "Source Sans 3",
+                                     size = 12,
+                                     margin = margin(b = 5)),
+        plot.caption = element_text(family = "Source Sans 3", 
+                                    size = 12),
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        legend.text = element_text(family = "Source Sans 3",
+                                   size = 12),
+        plot.background = element_rect(fill = "#FAF8F6",
+                                       color = NA),
+        panel.background = element_rect(fill = "#FAF8F6"),
+        axis.ticks = element_blank(),
+        axis.text.y = element_text(size = 12, 
+                                   hjust = 0),
+        panel.grid = element_blank(),
+        legend.background =element_blank(),
+        legend.key = element_blank())
+
+bubble
+#interactive
+
+plotly::ggplotly(bubble, tooltip = "tooltip")
+
+```
+#export
+
+```{r}
+ggsave(paste0(proj, "/visuals/top_25.png"))
+```
+
+
+#datawrapper export
+
+```{r}
+top_25_sched = df_rank %>%
+  mutate(quad_result = paste0(quad, " ", result)) %>%
+  mutate(heat = case_when(quad_result == "Q1 W" ~ 1,
+                          quad_result == "Q2 W" ~ 2,
+                          quad_result == "Q3 W" ~ 3,
+                          quad_result == "Q4 W" ~ 4,
+                          quad_result == "Q1 L" ~ 5,
+                          quad_result == "Q2 L" ~ 6,
+                          quad_result == "Q3 L" ~ 7,
+                          quad_result == "Q4 L" ~ 8)) %>%
+  select(team, game_order, heat) %>%
+  pivot_wider(names_from = game_order, values_from = heat) 
+
+
+```
+
+```{r}
+write_csv(top_25_sched, paste0(proj, "/data/top_25.csv"))
+```
+
