@@ -1,7 +1,7 @@
 ---
 title: "Svelte Challenge: Part I"
-subtitle:  "Can I learn interactive data viz in two months?"
-excerpt: "Can I learn interactive data viz in two months?"
+subtitle:  "Can I learn interactive data viz in three months?"
+excerpt: "Can I learn interactive data viz in three months?"
 date: 2024-04-11
 author: 
 draft: false
@@ -12,13 +12,17 @@ categories:
 layout: single
 ---
 
+# TL;DR
+
+I'm learning Svelte for data viz and blogging about my experience.
+
 Back in January I launched this blog as an accountability tool to motivate me to improve my data visualization skills. In the first three months of the year, I’ve focused on static visualizations. 
 
 For me, this meant improving my existing R and Ggplot2 skills ([mostly by attempting to recreate charts I see online](https://orionwilcox.com/blog/2024-03-14-immigrant-nation/)), learning Figma, and taking [Will Chase's course](https://rfortherestofus.com/courses/glamour/) on design for data visualization. 
 
 For my next project I’ve decided to jump into learning interactive data visualization with Svelte. I’ve always been amazed by the interactive web projects produced by places like The Pudding, but I always felt like building something like this was way outside my ability. But recently I’ve seen more and more people online talking about how Svelte–a front-end Javascript framework that was specifically built for creating interactive data viz–is making this process easier.
 
-This challenge is also an experiment to see how far a data analyst with programming experience but no front-end background can get with interactive data viz in a month. Since I’m learning this from scratch I thought it would be useful to document my experience for others who might be thinking of learning Svelte.
+This challenge is also an experiment to see how far a data analyst with programming experience but no front-end background can get with interactive data viz in a few months. Since I’m learning this from scratch I thought it would be useful to document my experience for others who might be thinking of learning Svelte.
 
 Here’s what I’m going to do: 
 
@@ -68,6 +72,6 @@ In my experience, step 3 is the most time-consuming but crucial part of this pro
 
 ### How long will this take?
 
-I’m giving myself two months for this challenge. The course FAQ’s estimate that the course itself takes about 20 hours to complete. Since I’m spending about an hour a day during working days on the course, it should take me a month. I’m then adding in another month learn some front-end basics (HTML, CSS, Javascript) and do my own personal projects.
+I’m giving myself three months for this challenge. The course FAQ’s estimate that the course itself takes about 20 hours to complete. Since I’m spending about an hour a day during working days on the course, it should take me a month. I’m then adding in another month two months to learn some front-end basics (HTML, CSS, Javascript) and do my own personal projects.
 
 **Check in next week for a post on what I did in my first two weeks (spoiler: it involves a very ugly scatter plot).**
